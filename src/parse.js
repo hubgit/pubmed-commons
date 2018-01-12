@@ -31,20 +31,21 @@ files.forEach(file => {
 
   $ = cheerio.load(data.comments)
 
-  const items = $('.comm_item').filter(el => {
+  const items = $('.comm_item').filter((i, el) => {
     // ignore "This article was mentioned in a comment" comments
     return !$(el).find('.recip_see').length
   }).map((i, el) => {
     const node = $(el)
 
     const votes = parseVotes(node)
+    const url = node.find('.comm_permalink').attr('href')
 
     const item = {
-      pmid,
+      article: 'https://pubmed.gov/' + pmid,
       id: node.attr('data-cmid'),
       // date: node.find('.comm_date_d').text(),
       date: moment(node.find('.comm_date_d').text(), 'YYYY MMM DD hh:mm a').toISOString(),
-      url: 'http://www.ncbi.nlm.nih.gov' + node.find('.comm_permalink').attr('href'),
+      url: url ? 'http://www.ncbi.nlm.nih.gov' + url : null,
       positiveVotes: votes ? votes.positive : 0,
       totalVotes: votes ? votes.total : 0,
       moderated: node.find('.not_appr').length,
