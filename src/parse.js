@@ -2,7 +2,6 @@ const fs = require('fs-extra')
 const glob = require('glob')
 const path = require('path')
 const cheerio = require('cheerio')
-// const moment = require('moment')
 
 const outputDir = __dirname + '/../data/parsed'
 fs.ensureDirSync(outputDir)
@@ -10,18 +9,16 @@ fs.ensureDirSync(outputDir)
 const inputDir = __dirname + '/../data/source'
 const files = glob.sync(inputDir + '/*.json')
 
-files.map(file => {
+files.forEach(file => {
   const data = fs.readJsonSync(file)
 
   $ = cheerio.load(data.comments)
 
-  const items = $('li').map((i, el) => {
+  const items = $('.comm_item').filter(el => {
+    // ignore "This article was mentioned in a comment" comments
+    return !$(el).find('.recip_see').length
+  }).map((i, el) => {
     const node = $(el)
-
-    // FIXME: for conversion, need to know the timezone of the original date
-    // const date = node.find('.comm_date_d').text() // e.g. 2014 Mar 26 00:35 a.m.
-    // https://momentjs.com/docs/#/parsing/string-format/
-    // const isodate = moment(date, 'YYYY MMM DD hh:mm a').toString()
 
     return {
       id: node.attr('data-cmid'),
@@ -34,11 +31,6 @@ files.map(file => {
     }
   }).toArray()
 
-  console.log(items)
-
-  const id = path.basename(file, '.json')
-
-  const output = `${outputDir}/${id}.json`
-
+  const output = outputDir + '/' + path.basename(file)
   fs.writeJsonSync(output, items)
 })
