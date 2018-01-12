@@ -1,0 +1,14 @@
+{
+  "name": "pubmed-commons",
+  "version": "0.0.1",
+  "main": "index.js",
+  "author": "Alf Eaton <eaton.alf@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "fetch-resource": "^0.3.2",
+    "fs-extra": "^5.0.0",
+    "glob": "^7.1.2",
+    "moment": "^2.20.1"
+  }
+}
