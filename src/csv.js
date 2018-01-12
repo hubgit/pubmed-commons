@@ -4,7 +4,9 @@ const path = require('path')
 const moment = require('moment')
 const csvWriteStream = require('csv-write-stream')
 
-const writer = csvWriteStream()
+const writer = csvWriteStream({
+  separator: '\t'
+})
 writer.pipe(fs.createWriteStream(__dirname + '/../data/comments.csv'))
 
 const getIsoDate = comment => moment(comment.date, 'YYYY MMM DD hh:mm a').toString()
