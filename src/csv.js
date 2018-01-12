@@ -9,7 +9,7 @@ const writer = csvWriteStream({
 })
 writer.pipe(fs.createWriteStream(__dirname + '/../data/comments.csv'))
 
-const getIsoDate = comment => moment(comment.date, 'YYYY MMM DD hh:mm a').toString()
+const getIsoDate = comment => moment(comment.date, 'YYYY MMM DD hh:mm a').toISOString()
 
 const getVotes = comment => {
   const matches = comment.votes.match(/(\d+) of (\d+)/)
